@@ -18,13 +18,15 @@ Notes taken during development, newest to oldest.
 - [ADR 015: Merging imported data with API data](./decisions/015-merging-import-with-api.md)
 
 **Tasks:**
-- [ ] Update `--help` commands
-- [ ] Add a built-in "output to log" output option
-- [ ] Testing ... API modules, file storage modules, core commands ([Mock Service Worker](ttps://mswjs.io)?), Node version testing
 - [ ] Configuration for delete number of duplicate files for a specific day and delete run logs
-- [ ] Need a way to filter out values (e.g. filtering me out of events) and replace values (like names that should point elsewhere) during processing
-- [ ] Fix: Secondary endpoints fail with no way to re-run
-- [ ] Explore https://nutjs.dev for data export
+## [[2024-12-08]]
+
+I've been thinking a lot about this project but have not had a lot of time to work on it. After a couple of months, opening up the editor always comes with issues:
+
+- The API getter was not even running 🤦 turns out the space in the directory name in the `.env` file was borking the command.
+- Dependency updates and audit fixes
+- Loading the state of the project into RAM
+
 
 ## [[2024-09-22]]
 
