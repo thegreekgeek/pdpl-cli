@@ -243,8 +243,7 @@ Add the following lines:
 
 ```sh
 #!/bin/bash
-
-export $(egrep -v '^#' $HOME/.pdpl/.env | xargs)
+source $HOME/.pdpl/.env
 pdpl api:get github
 ```
 
