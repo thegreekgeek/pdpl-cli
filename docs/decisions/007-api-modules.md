@@ -25,13 +25,7 @@ https://github.com/PersonalDataPipeline/pdpl-cli/discussions/3
 
 ## Options
 
-**Option 1**
-
-> Description
-
-**Option 2**
-
-> Description
+`TBD`
 
 ## Decision
 
@@ -39,4 +33,4 @@ https://github.com/PersonalDataPipeline/pdpl-cli/discussions/3
 
 ## Follow-up
 
-> Optional: what are the reasons why this decision worked or why it needed to be changed?
+`TBD`
