@@ -48,7 +48,7 @@ export const baseUrl = AUTHORIZE_APP_SERVER_HTTPS_PORT
   : `http://localhost:${serverPort}`;
 
 export default class ApiAuthorize extends ApiBaseCommand<typeof ApiAuthorize> {
-  static override summary = "Authorize for an API";
+  static override summary = "Authorize PDPL for an API";
   static override examples = ["<%= config.bin %> <%= command.id %> API_NAME"];
 
   static override args = {

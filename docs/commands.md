@@ -6,7 +6,7 @@ $ npm install -g pdpl-cli
 $ pdpl COMMAND
 running command...
 $ pdpl (--version)
-pdpl-cli/0.12.0 darwin-arm64 node-v20.11.1
+pdpl-cli/0.12.0 darwin-arm64 node-v22.8.0
 $ pdpl --help [COMMAND]
 USAGE
   $ pdpl COMMAND
@@ -32,7 +32,7 @@ USAGE
 
 ## `pdpl api:authorize APINAME`
 
-Authorize for an API
+Authorize PDPL for an API
 
 ```
 USAGE
@@ -52,7 +52,7 @@ FLAG DESCRIPTIONS
 
 ## `pdpl api:curl APINAME`
 
-Build cURL commands for all API endpoints
+Output curl commands for an API
 
 ```
 USAGE
@@ -64,7 +64,7 @@ EXAMPLES
 
 ## `pdpl api:get APINAME`
 
-Get API data based on a queue
+Get API data based on the queue
 
 ```
 USAGE
@@ -79,7 +79,7 @@ EXAMPLES
 
 ## `pdpl api:info APINAME`
 
-Display info for a specific API
+Display info for an API
 
 ```
 USAGE
@@ -169,7 +169,7 @@ EXAMPLES
 
 ## `pdpl config:get`
 
-Get configuration
+Get PDPL configuration
 
 ```
 USAGE
@@ -196,7 +196,7 @@ EXAMPLES
 
 ## `pdpl import IMPORTNAME IMPORTPATH`
 
-Import a file or directory
+Import a file or directory of files
 
 ```
 USAGE
@@ -217,7 +217,7 @@ USAGE
 
 ## `pdpl recipe:validate RECIPE_NAME`
 
-Process data using recipes
+Run validation for a recipe
 
 ```
 USAGE

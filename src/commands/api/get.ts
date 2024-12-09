@@ -15,7 +15,7 @@ import { makeOutputPath, writeOutputFile } from "../../utils/fs.js";
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
-  static override summary = "Get API data based on a queue";
+  static override summary = "Get API data based on the queue";
 
   static override args = {
     ...apiNameArg,

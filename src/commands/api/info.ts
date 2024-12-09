@@ -3,7 +3,7 @@ import { ApiBaseCommand, apiNameArg } from "./_base.js";
 import path from "path";
 
 export default class ApiInfo extends ApiBaseCommand<typeof ApiInfo> {
-  static override summary = "Display info for a specific API";
+  static override summary = "Display info for an API";
   static override examples = ["<%= config.bin %> <%= command.id %> API_NAME"];
 
   static override args = {

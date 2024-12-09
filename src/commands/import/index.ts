@@ -10,7 +10,7 @@ import { makeOutputPath, readFile, writeOutputFile } from "../../utils/fs.js";
 import logger from "../../utils/logger.js";
 
 export default class Import extends ImportBaseCommand<typeof Import> {
-  static override summary = "Import a file or directory";
+  static override summary = "Import a file or directory of files";
 
   static override examples = ["<%= config.bin %> <%= command.id %> IMPORT_NAME"];
 

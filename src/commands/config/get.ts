@@ -3,7 +3,7 @@ import { Command, Flags } from "@oclif/core";
 import getConfig from "../../utils/config.js";
 
 export default class ConfigGet extends Command {
-  static override summary = "Get configuration";
+  static override summary = "Get PDPL configuration";
 
   static override examples = ["<%= config.bin %> <%= command.id %>"];
 

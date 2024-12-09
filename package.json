@@ -16,6 +16,7 @@
     "prettier-watch": "onchange './src/**/*.ts' -- prettier --write --ignore-unknown {{changed}}",
     "format": "npm run eslint && npm run prettier",
     "caddy": "caddy run --envfile .env",
+    "oclif-readme": "npm run build && npm exec oclif readme -- --readme-path='./docs/commands.md'",
     "apis": "./bin/dev.js api:list",
     "get": "./bin/dev.js api:get",
     "logs": "./bin/dev.js api:logs",
