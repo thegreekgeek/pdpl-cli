@@ -7,7 +7,7 @@
 **Maintenance and development:**
 - [Releasing](./releasing.md)
 - [Decisions](https://github.com/PersonalDataPipeline/data-getter/blob/main/docs/decisions/) - Design decisions ([ADRs](https://adr.github.io)) considered during the development of this project.
-- [Development log](./devlog.md) - Probably more useful to me than you. These are the notes I've been taking while building this system, separated by day. These link out to documents in the folder below.
+- [Development log](./devlog) - Probably more useful to me than you. These are the notes I've been taking while building this system, separated by day. These link out to documents in the folder below.
 
 **Open ADRs:**
 - [ADR 003: Handling manual timeline entries](./decisions/003-handling-timeline-entries.md)
