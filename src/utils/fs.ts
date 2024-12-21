@@ -6,6 +6,8 @@ import {
   cpSync,
   accessSync,
   constants,
+  rmSync,
+  Dirent,
 } from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -44,6 +46,10 @@ export const writeFile = (filePath: string, contents: string) => {
   writeFileSync(filePath, contents);
 };
 
+export const removeFile = (filePath: string) => {
+  rmSync(filePath);
+};
+
 export const copyFile = (source: string, destination: string) => {
   cpSync(source, destination, { recursive: true, preserveTimestamps: true });
 };
@@ -55,6 +61,9 @@ export const readDirectory = (dirPath: string) => {
 export const makeDirectory = (dirPath: string) => {
   return mkdirSync(dirPath, { recursive: true });
 };
+
+export const isFileJson = (file: Dirent) =>
+  file.isFile() && file.name.split(".").slice(-1).pop() === "json";
 
 export const envWrite = (key: string, newValue: string, replaceValue?: string): void => {
   const envPath = path.join(DEFAULT_CONFIG_DIR, ".env");

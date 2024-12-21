@@ -46,6 +46,7 @@ export interface Config {
   importsSupported: string[];
   inputsSupported: string[];
   outputsSupported: string[];
+  runLogFileLimit: number;
 }
 
 interface ConfigFile
@@ -75,6 +76,7 @@ const defaultConfig: Config = {
   saveEmptyLogs: true,
   debugOutputDir: path.join(homedir(), "api-data-DEBUG"),
   debugCompressJson: false,
+  runLogFileLimit: 0,
 };
 
 const configPath = PATH_TO_CONFIG ? PATH_TO_CONFIG : DEFAULT_CONFIG_PATH;

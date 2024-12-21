@@ -7,3 +7,5 @@ export const arrayMissingValue = (haystack: string[], needles: string[]): string
   }
   return "";
 };
+
+export const arraySortDescending = (a: string, b: string) => (a > b ? -1 : b > a ? 1 : 0);

@@ -78,7 +78,7 @@ describe("Logger", () => {
       writeFileCall = (writeFile as Mock).mock.calls[0] as [];
     });
 
-    it("generates the correct log content", () => {
+    it("outputs the log content", () => {
       expect(global.console.log).toBeCalledTimes(1);
     });
 
@@ -99,7 +99,7 @@ describe("Logger", () => {
       writeFileCall = (writeFile as Mock).mock.calls[0] as [];
     });
 
-    it("generates the correct log content", () => {
+    it("outputs the log content", () => {
       expect(global.console.log).toBeCalledTimes(1);
     });
 

@@ -1,9 +1,12 @@
 import { AxiosError } from "axios";
 
 import { getFormattedDate, getFormattedTime, runDateUtc } from "./date-time.js";
-import { makeOutputPath, writeFile } from "./fs.js";
+import { isFileJson, makeOutputPath, removeFile, writeFile } from "./fs.js";
 import { ApiHandler } from "./types.js";
 import getConfig from "./config.js";
+import path from "path";
+import { readdirSync } from "fs";
+import { arraySortDescending } from "./array.js";
 
 ////
 /// Types
@@ -80,7 +83,7 @@ type AnyLogEntry = RunLogInfoEntry | RunLogSuccessEntry | RunLogErrorEntry;
 /// Helpers
 //
 
-const logLevel = getConfig().logLevel;
+const { logLevel, saveEmptyLogs, runLogFileLimit, outputDir } = getConfig();
 
 const runLog: RunLogFile = {
   dateTime: runDateUtc().dateTime,
@@ -98,6 +101,19 @@ const print = (entry: PrintLogEntry) => {
     "endpoint" in entry && entry.endpoint ? ` [ENDPOINT: ${entry.endpoint}]` : "",
     "message" in entry && entry.message ? ` ${entry.message}` : ""
   );
+};
+
+const _truncateLogFiles = (logPath: string[]) => {
+  if (runLogFileLimit <= 0) {
+    return;
+  }
+
+  (readdirSync(path.join(outputDir, ...logPath), { withFileTypes: true }) || [])
+    .filter(isFileJson)
+    .map((file) => path.join(file.parentPath, file.name))
+    .sort(arraySortDescending)
+    .slice(runLogFileLimit)
+    .forEach((logFile) => removeFile(logFile));
 };
 
 ////
@@ -178,7 +194,7 @@ const error = ({ endpoint, error }: ErrorEntry) => {
 };
 
 const shutdown = (apiName?: string) => {
-  if (!getConfig().saveEmptyLogs && !runLog.entries.length) {
+  if (!saveEmptyLogs && !runLog.entries.length) {
     return;
   }
   runLog.endTimeMs = Date.now();
@@ -186,6 +202,7 @@ const shutdown = (apiName?: string) => {
 
   const savePath = [...(apiName ? [apiName, "_runs"] : ["_runs"])];
   writeFile(makeOutputPath(savePath), JSON.stringify(runLog, null, 2));
+  _truncateLogFiles(savePath);
 
   runLog.entries = [];
 };

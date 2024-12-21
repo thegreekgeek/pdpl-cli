@@ -1,7 +1,7 @@
 import type { Mock } from "vitest";
 
-import { readFileSync, writeFileSync } from "fs";
-import { envWrite } from "./fs.js";
+import { Dirent, readFileSync, writeFileSync } from "fs";
+import { envWrite, isFileJson } from "./fs.js";
 import { DEFAULT_CONFIG_DIR } from "./constants.js";
 import path from "path";
 
@@ -72,6 +72,39 @@ describe("File system", () => {
       (readFileSync as Mock).mockImplementation(() => "ENV_VAR_NAME_1=REPLACE_ME_VALUE");
       envWrite("ENV_VAR_NAME_1", "ENV_VAR_VALUE_2", "REPLACE_ME_VALUE");
       expect(writeFileSync).toBeCalledWith(envPath, 'ENV_VAR_NAME_1="ENV_VAR_VALUE_2"');
+    });
+  });
+
+  describe("isFileJson", () => {
+    let mockFile = new Dirent();
+    beforeEach(() => {
+      mockFile = new Dirent();
+    });
+
+    it("confirms actual JSON files", () => {
+      mockFile.isFile = () => true;
+
+      mockFile.name = "file.json";
+      expect(isFileJson(mockFile)).toEqual(true);
+
+      mockFile.name = "file.thing.json";
+      expect(isFileJson(mockFile)).toEqual(true);
+    });
+
+    it("denies files that aren't JSON", () => {
+      mockFile.name = "file.js";
+      mockFile.isFile = () => true;
+      expect(isFileJson(mockFile)).toEqual(false);
+    });
+
+    it("denies things that aren't files", () => {
+      mockFile.isFile = () => false;
+
+      mockFile.name = "files";
+      expect(isFileJson(mockFile)).toEqual(false);
+
+      mockFile.name = "file.json";
+      expect(isFileJson(mockFile)).toEqual(false);
     });
   });
 });
