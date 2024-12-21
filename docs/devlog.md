@@ -2,31 +2,17 @@
 
 Notes taken during development, newest to oldest. 
 
-## TODO
 
-**Open issues:**
-- https://github.com/PersonalDataPipeline/pdpl-cli/issues
-
-**Open ADRs:**
-- [ADR 003: Handling manual timeline entries](./decisions/003-handling-timeline-entries.md)
-- [ADR 007: API module contribution](./decisions/007-api-modules.md)
-- [ADR 009: Storage API modules](./decisions/009-storage-api-modules)
-- [ADR 011: Type transformations during processing](./decisions/011-type-transformations)
-- [ADR 012: Recipe storage](./decisions/012-recipe-storage.md)
-- [ADR 013: Handling multiple accounts](./decisions/013-handling-multiple-accounts.md)
-- [ADR 014: Replacing processed content](./decisions/014-replacing-processed-content.md)
-- [ADR 015: Merging imported data with API data](./decisions/015-merging-import-with-api.md)
-
-**Tasks:**
-- [ ] Configuration for delete number of duplicate files for a specific day and delete run logs
 ## [[2024-12-08]]
 
 I've been thinking a lot about this project but have not had a lot of time to work on it. After a couple of months, opening up the editor always comes with issues:
 
 - The API getter was not even running 🤦 turns out the space in the directory name in the `.env` file was borking the command.
 - Dependency updates and audit fixes
+- Tests failing (hard-coded time failing now that we're out of DST)
 - Loading the state of the project into RAM
 
+I got the cron job running again and adjusted the docs to match. I got myself familiar with the commands again and made some documentation updates. Then I tackled a number of dependency updates and got rid of the task list above (not really helping much).
 
 ## [[2024-09-22]]
 
