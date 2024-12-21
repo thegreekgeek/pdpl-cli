@@ -24,7 +24,8 @@
     "info": "./bin/dev.js api:info",
     "queue": "./bin/dev.js api:queue:get",
     "import": "./bin/dev.js import",
-    "config": "./bin/dev.js config"
+    "config": "./bin/dev.js config",
+    "devlog": "PATH_TO_DEVLOG_SOURCE='/Users/joshcanhelp/Notes/Logs' ./bin/dev.js dev:log"
   },
   "author": "",
   "license": "MIT",
