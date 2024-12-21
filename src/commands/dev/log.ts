@@ -7,6 +7,7 @@ const { PATH_TO_DEVLOG_SOURCE } = process.env;
 
 export default class Log extends Command {
   static override summary = "Pull in devlogs from a local Obsidian";
+  static override hidden = true;
 
   public async run(): Promise<void> {
     if (!PATH_TO_DEVLOG_SOURCE || !existsSync(PATH_TO_DEVLOG_SOURCE)) {
