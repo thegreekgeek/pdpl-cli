@@ -20,6 +20,7 @@ export default {
 - `imports`: Similar to `apis`, this is simply an array of strings indicating imports that are valid to run. 
 - `compressJson`: Boolean to save the gathered data as compressed (`true`) or pretty-printed (`false`). Default is `true`.
 - `originDate`: The date used as the earliest date for gathered data. Data received that is older than this date will be ignored. Note that some APIs do not currently support this and will pull down all historic data available.
+- `runLogFileLimit`: The number of run log files to keep. Default is `0` to keep all files.
 
 **Debugging options**
 
