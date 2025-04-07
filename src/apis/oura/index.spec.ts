@@ -12,7 +12,7 @@ describe("Module: Oura API handler", () => {
       })[0] as EpChronological;
     });
 
-    it("gets the correct default params", () => {
+    it.skip("gets the correct default params", () => {
       // TODO: Setup test config with a known timezone
       expect(epHandler.getParams!()).toEqual({
         start_datetime: `${getFormattedDate(-3)}T08:00:00.000Z`,
@@ -20,7 +20,7 @@ describe("Module: Oura API handler", () => {
       });
     });
 
-    it("gets the correct historic params", () => {
+    it.skip("gets the correct historic params", () => {
       // TODO: Setup test config with a known timezone
       expect(epHandler.getHistoricParams()).toEqual({
         start_datetime: `${getFormattedDate(-3)}T08:00:00.000Z`,
@@ -28,7 +28,7 @@ describe("Module: Oura API handler", () => {
       });
     });
 
-    it("calculates the correct next params", () => {
+    it.skip("calculates the correct next params", () => {
       // TODO: Setup test config with a known timezone
       expect(epHandler.getHistoricParams(epHandler.getParams!())).toEqual({
         start_datetime: `${getFormattedDate(-6)}T08:00:00.000Z`,
