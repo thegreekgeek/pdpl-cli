@@ -25,15 +25,18 @@ export interface RunLogger {
 
 export interface InfoEntry {
   message: string;
+  apiName?: string;
   endpoint?: string;
 }
 
 export interface ErrorEntry {
   error: unknown;
+  apiName?: string;
   endpoint?: string;
 }
 
 export interface SuccessEntry {
+  apiName: string;
   endpoint: string;
   filesWritten?: number;
   filesSkipped?: number;
@@ -45,6 +48,7 @@ export interface RunLogInfoEntry {
   type: ValidLogLevels;
   timeMs: number;
   message: string;
+  apiName?: string;
   endpoint?: string;
 }
 
@@ -149,13 +153,21 @@ const info = ({ message, endpoint }: InfoEntry) => {
   print(entry);
 };
 
-const success = ({ endpoint, filesWritten, filesSkipped, total, days }: SuccessEntry) => {
+const success = ({
+  apiName,
+  endpoint,
+  filesWritten,
+  filesSkipped,
+  total,
+  days,
+}: SuccessEntry) => {
   if (LOG_LEVELS[logLevel] > LOG_LEVELS["success"]) {
     return;
   }
   const entry = {
     type: "success",
     timeMs: Date.now(),
+    apiName,
     endpoint,
     filesWritten,
     filesSkipped,
@@ -171,7 +183,7 @@ const success = ({ endpoint, filesWritten, filesSkipped, total, days }: SuccessE
   });
 };
 
-const error = ({ endpoint, error }: ErrorEntry) => {
+const error = ({ apiName, endpoint, error }: ErrorEntry) => {
   const message =
     typeof error === "string"
       ? error
@@ -185,6 +197,7 @@ const error = ({ endpoint, error }: ErrorEntry) => {
   const entry = {
     type: "error",
     timeMs: Date.now(),
+    apiName,
     endpoint,
     message,
     data,

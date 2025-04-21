@@ -58,6 +58,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
     const runQueue = queue.processQueue(apiHandler, logger, forceRun);
     if (!runQueue.length) {
       logger.info({
+        apiName: apiHandler.getApiName(),
         message: "Empty run queue ... stopping",
       });
       return;
@@ -71,6 +72,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
 
     for (const runEntry of runQueue) {
       const endpoint = runEntry.endpoint;
+      const apiName = apiHandler.getApiName();
       const epHandler = Object.assign(
         {
           getParams: () => ({}),
@@ -95,6 +97,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
       }
 
       const runMetadata = {
+        apiName,
         endpoint,
         filesWritten: 0,
         filesSkipped: 0,
@@ -110,10 +113,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
           apiResponse = await getApiData(apiHandler, epHandler);
         } catch (error) {
           epHandler.handleApiError(error as AxiosError);
-          logger.error({
-            endpoint,
-            error,
-          });
+          logger.error({ apiName, endpoint, error});
           break;
         }
         apiResponseData = epHandler.transformResponseData(apiResponse, apiResponseData);
@@ -124,7 +124,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
       } while (isObjectWithKeys(nextCallParams));
 
       if (typeof apiResponseData === "undefined") {
-        logger.info({ message: "No data returned from the API", endpoint });
+        logger.info({ message: "No data returned from the API", apiName, endpoint });
         continue;
       }
 
@@ -149,7 +149,8 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
           }
         } catch (error) {
           logger.error({
-            endpoint: endpoint,
+            apiName,
+            endpoint,
             error,
           });
           continue;
@@ -224,6 +225,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
 
       for (const entity of entities) {
         const runMetadata = {
+          apiName,
           endpoint: epHandler.getEndpoint(entity),
           filesWritten: 0,
           filesSkipped: 0,
@@ -235,6 +237,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
           apiResponse = await getApiData(apiHandler, epHandler, entity);
         } catch (error) {
           logger.error({
+            apiName,
             endpoint: epHandler.getEndpoint(entity),
             error,
           });

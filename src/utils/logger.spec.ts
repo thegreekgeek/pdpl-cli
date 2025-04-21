@@ -31,6 +31,7 @@ const mockInfoLog: InfoEntry = {
 };
 
 const mockSuccessLog: SuccessEntry = {
+  apiName: "API_NAME",
   endpoint: "mock/endpoint",
   filesWritten: 12,
   filesSkipped: 11,
