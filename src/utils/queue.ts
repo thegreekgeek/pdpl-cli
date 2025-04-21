@@ -177,6 +177,20 @@ export const updateStandardEntry = (
   writeQueue();
 };
 
+export const removeStandardEntryFor = (endpoint: string) => {
+  let didRemove = false;
+  for (const [index, entry] of queue.entries()) {
+    if (entry.endpoint === endpoint && isStandardEntry(entry)) {
+      delete queue[index];
+      didRemove = true;
+    }
+  }
+  if (didRemove) {
+    writeQueue();
+  }
+  return didRemove;
+};
+
 export const hasHistoricEntryFor = (endpoint: string) => {
   return (
     queue.filter((entry: QueueEntry) => {
@@ -184,6 +198,20 @@ export const hasHistoricEntryFor = (endpoint: string) => {
       return sameEndpoint && entry.historic;
     }).length > 0
   );
+};
+
+export const removeHistoricEntryFor = (endpoint: string) => {
+  let didRemove = false;
+  for (const [index, entry] of queue.entries()) {
+    if (entry.endpoint === endpoint && entry.historic) {
+      delete queue[index];
+      didRemove = true;
+    }
+  }
+  if (didRemove) {
+    writeQueue();
+  }
+  return didRemove;
 };
 
 export const updateHistoricEntry = ({

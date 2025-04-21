@@ -173,9 +173,10 @@ describe("Class: Queue", () => {
   });
 
   describe("entry management", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       (readFile as Mock).mockImplementation(() => "[]");
       queue.loadQueue(mockApiHandler);
+      queue.addEntry(mockOtherEntry);
     });
 
     it("finds no standard entries in an empty queue", () => {
@@ -206,19 +207,41 @@ describe("Class: Queue", () => {
       });
     });
 
-    describe("no standard or historic entries", () => {
-      beforeEach(() => {
-        queue.addEntry(mockOtherEntry);
-        queue.addEntry(mockOtherEntry);
-        queue.addEntry(mockOtherEntry);
+    describe("deletes a standard entry", () => {
+      beforeAll(() => {
+        queue.addEntry(mockHistoricEntry);
+        queue.addEntry(mockStandardEntry);
+      });
+
+      it("deletes the standard entry", () => {
+        expect(queue.removeStandardEntryFor("this/endpoint")).toEqual(true);
       });
 
       it("does not find a standard entry", () => {
         expect(queue.hasStandardEntryFor("this/endpoint")).toEqual(false);
       });
 
+      it("still finds a historic entry", () => {
+        expect(queue.hasHistoricEntryFor("this/endpoint")).toEqual(true);
+      });
+    });
+
+    describe("deletes a historic entry", () => {
+      beforeAll(() => {
+        queue.addEntry(mockHistoricEntry);
+        queue.addEntry(mockStandardEntry);
+      });
+
+      it("deletes the historic entry", () => {
+        expect(queue.removeHistoricEntryFor("this/endpoint")).toEqual(true);
+      });
+
       it("does not find a historic entry", () => {
         expect(queue.hasHistoricEntryFor("this/endpoint")).toEqual(false);
+      });
+
+      it("still finds the standard entry", () => {
+        expect(queue.hasStandardEntryFor("this/endpoint")).toEqual(true);
       });
     });
   });
