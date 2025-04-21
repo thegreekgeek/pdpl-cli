@@ -41,6 +41,9 @@ export default class ApiQueueSet extends ApiBaseCommand<typeof ApiQueueSet> {
       char: "e",
       summary: "Only initialize a specific endpoint",
     }),
+    "rebuild": Flags.boolean({
+      summary: "Delete existing entries and rebuild from scratch",
+    }),
   };
 
   public override async run(): Promise<void> {
@@ -49,6 +52,7 @@ export default class ApiQueueSet extends ApiBaseCommand<typeof ApiQueueSet> {
       "historic-only": historicOnly,
       "standard-only": standardOnly,
       "run-now": runNow,
+      "rebuild": rebuild,
     } = this.flags;
 
     const { default: handler } = (await import(
@@ -67,6 +71,7 @@ export default class ApiQueueSet extends ApiBaseCommand<typeof ApiQueueSet> {
 
     logger.info({ message: `Reading queue file: ${queue.getQueueFile()}` });
 
+    // Each endpoint is processed separately
     for (const endpointHandler of handler.endpointsPrimary) {
       const endpointName = endpointHandler.getEndpoint();
       const logEntry = {
@@ -79,6 +84,14 @@ export default class ApiQueueSet extends ApiBaseCommand<typeof ApiQueueSet> {
       }
 
       if (!historicOnly) {
+        if (rebuild) {
+          queue.removeStandardEntryFor(endpointName);
+          logger.info({
+            ...logEntry,
+            message: `Removed standard entry for ${endpointName}`,
+          });
+        }
+
         if (queue.hasStandardEntryFor(endpointName)) {
           let message = `Standard entry already exists`;
           if (runNow) {
@@ -100,6 +113,14 @@ export default class ApiQueueSet extends ApiBaseCommand<typeof ApiQueueSet> {
       }
 
       if (!standardOnly) {
+        if (rebuild) {
+          queue.removeHistoricEntryFor(endpointName);
+          logger.info({
+            ...logEntry,
+            message: `Removed historic entry for ${endpointName}`,
+          });
+        }
+
         if (queue.hasHistoricEntryFor(endpointName)) {
           let message = `Historic entry already exists`;
           if (runNow) {
