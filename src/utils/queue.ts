@@ -76,10 +76,6 @@ export const getQueueFile = () => {
   return queueFile;
 };
 
-export const hasStandardEntryFor = (endpoint: string) => {
-  return getStandardEntriesFor(endpoint).length > 0;
-};
-
 export const addEntry = ({
   runAfter,
   endpoint,
@@ -154,13 +150,8 @@ export const processQueue = (
   return runQueue;
 };
 
-export const hasHistoricEntryFor = (endpoint: string) => {
-  return (
-    queue.filter((entry: QueueEntry) => {
-      const sameEndpoint = entry.endpoint === endpoint;
-      return sameEndpoint && entry.historic;
-    }).length > 0
-  );
+export const hasStandardEntryFor = (endpoint: string) => {
+  return getStandardEntriesFor(endpoint).length > 0;
 };
 
 export const updateStandardEntry = (
@@ -184,6 +175,15 @@ export const updateStandardEntry = (
     seenStandard = true;
   }
   writeQueue();
+};
+
+export const hasHistoricEntryFor = (endpoint: string) => {
+  return (
+    queue.filter((entry: QueueEntry) => {
+      const sameEndpoint = entry.endpoint === endpoint;
+      return sameEndpoint && entry.historic;
+    }).length > 0
+  );
 };
 
 export const updateHistoricEntry = ({
