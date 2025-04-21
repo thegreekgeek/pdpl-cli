@@ -1,12 +1,12 @@
 # Replacing processed content
 
-## Discussion
-
-https://github.com/PersonalDataPipeline/pdpl-cli/discussions/9
-
 ## Status
 
 `DRAFT`
+
+## Discussion
+
+https://github.com/PersonalDataPipeline/pdpl-cli/discussions/9
 
 ## Context
 

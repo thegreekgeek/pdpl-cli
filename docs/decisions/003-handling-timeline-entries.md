@@ -2,7 +2,7 @@
 
 ## Status
 
-`DRAFT`
+`REJECTED`
 
 ## Discussion
 
@@ -26,4 +26,4 @@ So we need a way to capture these that can be incorporated into the matrix of da
 
 ## Decision
 
-> What is the change that we're proposing and/or doing?
+This is not a core functionality of PDPL so we're going to skip this.
