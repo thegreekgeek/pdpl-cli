@@ -113,7 +113,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
           apiResponse = await getApiData(apiHandler, epHandler);
         } catch (error) {
           epHandler.handleApiError(error as AxiosError);
-          logger.error({ apiName, endpoint, error});
+          logger.error({ apiName, endpoint, error });
           break;
         }
         apiResponseData = epHandler.transformResponseData(apiResponse, apiResponseData);

@@ -48,7 +48,7 @@ const getTemplateFields = (template: string): string[] => {
 
 const buildLogTime = (date: Date) => {
   return (getFormattedDate(0, date) + "T" + getFormattedTime(date)).replaceAll(":", "-");
-}
+};
 
 ////
 /// Export
@@ -252,12 +252,12 @@ const handler: OutputHandler = {
         return errors;
       },
       handle: async (db: Database, fields: KeyVal, data?: LogsStrategyData) => {
-        const { 
+        const {
           title_template: titleTemplate,
           body_template: bodyTemplate,
-          log_datetime: logDatetime, 
+          log_datetime: logDatetime,
           source: source = "",
-          metadata = []
+          metadata = [],
         } = data as Required<LogsStrategyData>;
 
         const bodyTemplateFields = getTemplateFields(bodyTemplate);
@@ -270,22 +270,25 @@ const handler: OutputHandler = {
         const results = await db.all(`SELECT * FROM '${databaseTable}'`);
 
         for (const result of results) {
-        
           let title = buildLogTime((result as any)[logDatetime]);
           if (titleTemplate) {
             title += " - " + mustache.render(titleTemplate || "", result);
           }
 
           const filePath = path.join(savePath, title + ".md");
-          
+
           let existingContent = "";
           if (existsSync(filePath)) {
-            existingContent = readFileSync(filePath, {encoding: "utf8"}).split(notesSep)[1];
+            existingContent = readFileSync(filePath, { encoding: "utf8" }).split(
+              notesSep
+            )[1];
           }
 
-          const frontMatter: { [key: string]: any; } = {};
+          const frontMatter: { [key: string]: any } = {};
           for (const prop of metadata) {
-            frontMatter[prop.replace("__LINKED", "")] = Array.isArray(result[prop]) ? result[prop][0] : result[prop];
+            frontMatter[prop.replace("__LINKED", "")] = Array.isArray(result[prop])
+              ? result[prop][0]
+              : result[prop];
           }
 
           if (source) {
@@ -295,19 +298,31 @@ const handler: OutputHandler = {
           let mainContent = "";
           if (bodyTemplate) {
             const templateValues = Object.keys(result)
-              .filter(key => bodyTemplateFields.includes(key))
-              .map(key => ((Array.isArray(result[key]) ? result[key][0] : result[key]) || "").trim());
-            const templateVars = bodyTemplateFields.map((key, index) => [key, templateValues[index]])
-            mainContent = mustache.render(bodyTemplate || "", Object.fromEntries(templateVars));
+              .filter((key) => bodyTemplateFields.includes(key))
+              .map((key) =>
+                ((Array.isArray(result[key]) ? result[key][0] : result[key]) || "").trim()
+              );
+            const templateVars = bodyTemplateFields.map((key, index) => [
+              key,
+              templateValues[index],
+            ]);
+            mainContent = mustache.render(
+              bodyTemplate || "",
+              Object.fromEntries(templateVars)
+            );
           }
 
           const frontMatterContent = `---\n${yaml.dump(frontMatter)}---\n`;
-          writeFileSync(filePath, frontMatterContent + mainContent + (existingContent ? "\n" + notesSep + existingContent : ""))
-        } 
+          writeFileSync(
+            filePath,
+            frontMatterContent +
+              mainContent +
+              (existingContent ? "\n" + notesSep + existingContent : "")
+          );
+        }
       },
     },
   ],
 };
-
 
 export default handler;

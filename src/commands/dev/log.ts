@@ -14,10 +14,12 @@ export default class Log extends Command {
       console.log("Invalid or missing devlog source path");
       process.exit(1);
     }
-    
+
     const devlogDest = path.join(process.cwd(), "docs", "devlog");
     if (!existsSync(devlogDest)) {
-      console.log(`Devlogs path ${devlogDest} does not exist. Are you in the project root?`);
+      console.log(
+        `Devlogs path ${devlogDest} does not exist. Are you in the project root?`
+      );
       process.exit(1);
     }
 
@@ -27,12 +29,12 @@ export default class Log extends Command {
       }
 
       const fullPath = path.join(file.parentPath, file.name);
-      const fileContent = readFileSync(fullPath, {encoding: "utf-8"});
+      const fileContent = readFileSync(fullPath, { encoding: "utf-8" });
       const fileParts = fileContent.split("---");
 
       if (fileParts[0] !== "" || fileParts.length < 3) {
         continue;
-      }      
+      }
 
       const frontMatter = loadYaml(fileParts[1]) as { tags?: string[] };
       const { tags = [] } = frontMatter;
@@ -41,7 +43,7 @@ export default class Log extends Command {
         const newFileName = file.name.split(" - ")[0] + ".md";
         const newFilePath = path.join(devlogDest, newFileName);
         copyFileSync(fullPath, newFilePath);
-      } 
+      }
     }
   }
 }

@@ -16,7 +16,7 @@ Next, start the authorization process:
 ~ pdpl api:authorize pocket
 ```
 
-Click the link that appears in the terminal and follow the instructions to get an access token. If there is a problem with the process, check any displayed error messages or the terminal for how to proceed. 
+Click the link that appears in the terminal and follow the instructions to get an access token. If there is a problem with the process, check any displayed error messages or the terminal for how to proceed.
 
 The refresh token returned will be saved automatically to an environment variable named `POCKET_ACCESS_TOKEN`.
 

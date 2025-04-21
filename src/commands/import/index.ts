@@ -52,7 +52,7 @@ export default class Import extends ImportBaseCommand<typeof Import> {
         total: 0,
         days: 0,
         endpoint: fileHandler.getImportPath(),
-        apiName: importName
+        apiName: importName,
       };
 
       const filePath =

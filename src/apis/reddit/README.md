@@ -4,7 +4,7 @@
 
 ## Getting started
 
-This API requires you to create an application that can be used to generate access tokens that will authorize calls to the API. 
+This API requires you to create an application that can be used to generate access tokens that will authorize calls to the API.
 
 Go [here](https://www.reddit.com/prefs/apps/) and create a new application. Select "script" for the type and use `http://localhost:8888` as the callback URL. Create the application and add the client ID and the client secret as [environment variables](https://github.com/PersonalDataPipeline/pdpl-cli/blob/main/docs/configuration.md#environment-variables):
 
