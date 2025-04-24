@@ -31,9 +31,8 @@ export interface Config {
   filesOutputDir: string;
   timezone: string;
   originDate: string;
-  apis: {
-    [key: string]: string[] | true;
-  };
+  apis: Record<string, string[] | true>;
+  dbs: Record<string, string[] | true>;
   imports: string[];
   logLevel: ValidLogLevels;
   compressJson: boolean;
@@ -69,6 +68,7 @@ const defaultConfig: Config = {
   filesOutputDir: path.join(homedir(), "api-data", "_files"),
   originDate: "1900-01-01",
   apis: {},
+  dbs: {},
   apisSupported: [],
   imports: [],
   importsSupported: [],
