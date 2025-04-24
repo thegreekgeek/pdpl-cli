@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 import getConfig from "./config.js";
 import { runDateUtc } from "./date-time.js";
 import { DEFAULT_CONFIG_DIR } from "./constants.js";
+import { arraySortDescending } from "./array.js";
 
 export const __filename = fileURLToPath(import.meta.url);
 
@@ -96,6 +97,10 @@ export const writeOutputFile = (writePath: string, fileContents: unknown): boole
 
   writeFileSync(writePath, fileContentsString);
   return true;
+};
+
+export const getLatestFile = (readPath: string) => {
+  return readDirectory(readPath).sort(arraySortDescending).at(0) || "";
 };
 
 export const getLatestFileContents = (writePath: string) => {
