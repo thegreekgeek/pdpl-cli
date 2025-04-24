@@ -247,7 +247,7 @@ export default class ApiGet extends ApiBaseCommand<typeof ApiGet> {
         const apiResponseData = epHandler.transformResponseData(apiResponse);
 
         const outputPath = makeOutputPath(
-          [apiName, epHandler.getDirName(apiResponseData as object)],
+          [apiName, epHandler.getDirName()],
           epHandler.getIdentifier(entity, apiResponseData as object)
         );
 
