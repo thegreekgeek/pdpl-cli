@@ -43,9 +43,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
 
 const endpointsSecondary: EpSecondary[] = [
   {
-    getDirName: (entity?: object) => {
-      return entity ? `item--${(entity as HNItemEntity).type}` : "item";
-    },
+    getDirName: () => "items",
     getEndpoint: (entity: unknown) => `item/${entity as number}.json`,
     getPrimary: () => `user/${HACKER_NEWS_USERNAME}.json`,
     // TODO: There's got to be a better way here
