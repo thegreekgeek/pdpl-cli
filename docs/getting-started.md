@@ -50,7 +50,8 @@ PDPL configures itself with a number of defaults. You can see the configuration 
 ~ pdpl config:get
 {
   timezone: 'GMT',
-  outputDir: '/Users/username/api-data',
+  jsonOutputDir: '/Users/username/api-data',
+  dbOutputDir: '/Users/username/db-data',
   filesOutputDir: '/Users/username/api-data/_files',
   originDate: '1900-01-01',
   apis: {},
@@ -82,14 +83,16 @@ Created config file /Users/username/.pdpl/get.config.mjs
 Edit the file to add values for the following properties in the exported object:
 
 - `timezone` - your local timezone
-- `outputDir` - direct path to where you want the raw JSON to be saved
+- `jsonOutputDir` - direct path to where you want the raw JSON to be saved
+- `dbOutputDir` - direct path to where you want the database to be saved
 
 See the [configuration option documentation](./configuration) for specifics on content and format. Your final file should look something like this:
 
 ```js
 export default {
   timezone: "America/Los_Angeles",
-  outputDir: "/Users/username/Documents/pdpl",
+  jsonOutputDir: "/Users/username/Documents/pdpl/json",
+  dbOutputDir: "/Users/username/Documents/pdpl/db",
 }
 ```
 
@@ -101,10 +104,8 @@ Run the `config:get` command to see your configuration changes and confirm that 
 Config file: /Users/username/.pdpl/get.config.mjs
 
 {
-  timezone: 'America/Los_Angeles',
-  outputDir: '/Users/username/Documents/pdpl',
-  originDate: '1985-10-11',
-  # ...
+  # ... output from above
+}
 ```
 
 Next, we're going to configure an API so we can start downloading data. To show all the APIs that are available for use, run the `api:list` command. This will display a table of all the APIs that can pull data. 
