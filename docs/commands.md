@@ -6,7 +6,7 @@ $ npm install -g pdpl-cli
 $ pdpl COMMAND
 running command...
 $ pdpl (--version)
-pdpl-cli/0.12.0 darwin-arm64 node-v22.8.0
+pdpl-cli/0.13.0 darwin-arm64 node-v22.14.0
 $ pdpl --help [COMMAND]
 USAGE
   $ pdpl COMMAND
@@ -26,6 +26,7 @@ USAGE
 * [`pdpl api:queue:set APINAME`](#pdpl-apiqueueset-apiname)
 * [`pdpl config:get`](#pdpl-configget)
 * [`pdpl config:init`](#pdpl-configinit)
+* [`pdpl db:build`](#pdpl-dbbuild)
 * [`pdpl import IMPORTNAME IMPORTPATH`](#pdpl-import-importname-importpath)
 * [`pdpl recipe:run RECIPE_NAME`](#pdpl-reciperun-recipe_name)
 * [`pdpl recipe:validate RECIPE_NAME`](#pdpl-recipevalidate-recipe_name)
@@ -149,12 +150,13 @@ Initialize the queue for an API
 
 ```
 USAGE
-  $ pdpl api:queue:set APINAME [-s | -h] [--run-now] [-e <value>]
+  $ pdpl api:queue:set APINAME [-s | -h] [--run-now] [-e <value>] [--rebuild]
 
 FLAGS
   -e, --endpoint=<value>  Only initialize a specific endpoint
   -h, --historic-only     Only initialize historic entries
   -s, --standard-only     Only initialize standard entries
+      --rebuild           Delete existing entries and rebuild from scratch
       --run-now           Set the run after time to now
 
 EXAMPLES
@@ -192,6 +194,26 @@ USAGE
 
 EXAMPLES
   $ pdpl config:init
+```
+
+## `pdpl db:build`
+
+Build tables from JSON files for enabled or indicated sources
+
+```
+USAGE
+  $ pdpl db:build [-a <value>] [-e <value>]
+
+FLAGS
+  -a, --api=<value>       Only build tables for a specific API
+  -e, --endpoint=<value>  Only build tables for a specific endpoint
+
+EXAMPLES
+  $ pdpl db:build API_NAME
+
+  $ pdpl db:build API_NAME --api API_NAME
+
+  $ pdpl db:build API_NAME --api API_NAME --endpoint ENDPOINT_NAME
 ```
 
 ## `pdpl import IMPORTNAME IMPORTPATH`
