@@ -19,7 +19,7 @@ export interface RunLogger {
   error: (entry: ErrorEntry) => void;
   success: (entry: SuccessEntry) => void;
   shutdown: (apiName?: string) => void;
-  printDebug: (data: object, apiHandler?: ApiHandler) => void;
+  printDebug: (data: object | string, apiHandler?: ApiHandler) => void;
   LOG_LEVELS: { [Level in ValidLogLevels]: number };
 }
 
@@ -133,7 +133,7 @@ const LOG_LEVELS = {
   none: 100,
 };
 
-const printDebug = (data: object) => {
+const printDebug = (data: object | string) => {
   if (LOG_LEVELS[logLevel] === LOG_LEVELS["debug"]) {
     console.log(data);
   }
