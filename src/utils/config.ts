@@ -27,6 +27,7 @@ const {
 
 export interface Config {
   outputDir: string;
+  dbOutputDir: string;
   filesOutputDir: string;
   timezone: string;
   originDate: string;
@@ -62,6 +63,7 @@ const defaultConfig: Config = {
   configFile: "GMT",
   timezone: "GMT",
   outputDir: path.join(homedir(), "api-data"),
+  dbOutputDir: path.join(homedir(), "db-data"),
   filesOutputDir: path.join(homedir(), "api-data", "_files"),
   originDate: "1900-01-01",
   apis: {},
@@ -135,6 +137,7 @@ export default (): Config => {
     processedConfig.logLevel = "debug";
   }
 
+  // Normalize the JSON output dir
   if (processedConfig.outputDir.at(0) === "~") {
     processedConfig.outputDir = path.join(homedir(), processedConfig.outputDir.slice(1));
   }
@@ -146,6 +149,24 @@ export default (): Config => {
   if (!pathAccessible(processedConfig.outputDir)) {
     throw new Error(
       `Configured output dir "${processedConfig.outputDir}" cannot be accessed`
+    );
+  }
+
+  // Normalize the DB output dir
+  if (processedConfig.dbOutputDir.at(0) === "~") {
+    processedConfig.dbOutputDir = path.join(
+      homedir(),
+      processedConfig.dbOutputDir.slice(1)
+    );
+  }
+
+  if (!pathExists(processedConfig.dbOutputDir)) {
+    makeDirectory(processedConfig.dbOutputDir);
+  }
+
+  if (!pathAccessible(processedConfig.dbOutputDir)) {
+    throw new Error(
+      `Configured output dir "${processedConfig.dbOutputDir}" cannot be accessed`
     );
   }
 
