@@ -156,6 +156,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
       response.data.items.filter((event: GoogleEventEntity) => {
         return event.status !== "cancelled" && isObjectWithKeys(event.start);
       }),
+    getIdentifierProp: () => "id",
   },
 ];
 const endpointsSecondary: EpSecondary[] = [];

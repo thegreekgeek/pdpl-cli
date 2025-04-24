@@ -50,6 +50,7 @@ const endpointsSecondary: EpSecondary[] = [
     // @ts-expect-error: first param not used
     getIdentifier: (entity1: object | number, entity2: object) =>
       (entity2 as HNItemEntity).id,
+    getIdentifierProp: () => "id",
   },
 ];
 

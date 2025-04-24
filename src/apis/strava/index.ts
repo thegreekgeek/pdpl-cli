@@ -117,6 +117,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
       continuation ? HALF_HOUR_IN_SEC : QUARTER_YEAR_IN_SEC,
     parseDayFromEntity: (entity: object) =>
       (entity as StravaActivityEntity).start_date_local.split("T")[0] || "",
+    getIdentifierProp: () => "id",
   },
 ];
 
@@ -125,6 +126,7 @@ const endpointsSecondary: EpSecondary[] = [
     getDirName: () => "activities",
     getEndpoint: (entity: object) => `activities/${getIdentifier(entity)}`,
     getPrimary: () => "athlete/activities",
+    getIdentifierProp: () => "id",
     getIdentifier,
   },
   {

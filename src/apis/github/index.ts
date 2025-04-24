@@ -130,6 +130,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
     parseDayFromEntity,
     getHistoricDelay,
     getHistoricParams,
+    getIdentifierProp: () => "id",
   },
 ];
 const endpointsSecondary: EpSecondary[] = [];

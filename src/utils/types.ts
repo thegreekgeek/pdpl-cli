@@ -41,6 +41,7 @@ export interface EpChronological
   parseDayFromEntity: (entity: object) => string;
   getHistoricParams: (currentParams?: object, responseDataRaw?: object | []) => object;
   getHistoricDelay: (continuation?: boolean) => number;
+  getIdentifierProp?: () => string;
   transformPrimary?: (entity: object | []) => unknown[];
   shouldHistoricContinue?: (
     responseDataRaw: object | [],
@@ -49,9 +50,10 @@ export interface EpChronological
 }
 
 export interface EpSecondary {
-  getDirName: (entity?: object) => string;
+  getDirName: () => string;
   getEndpoint: (entity: object) => string;
   getPrimary: () => string;
+  getIdentifierProp?: () => string;
   getIdentifier: (entity1: object | number, entity2: object) => string;
   getParams?: () => object;
   getMethod?: () => string;
