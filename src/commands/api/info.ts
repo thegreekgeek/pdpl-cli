@@ -40,7 +40,7 @@ export default class ApiInfo extends ApiBaseCommand<typeof ApiInfo> {
       );
       console.log(`  | Historic delay in seconds: ${histDelay}`);
       console.log(
-        `  | Directory: ${path.join(this.conf.outputDir, this.args.apiName, endpoint.getDirName())}`
+        `  | Directory: ${path.join(this.conf.jsonOutputDir, this.args.apiName, endpoint.getDirName())}`
       );
     }
   }

@@ -26,7 +26,7 @@ const {
 //
 
 export interface Config {
-  outputDir: string;
+  jsonOutputDir: string;
   dbOutputDir: string;
   filesOutputDir: string;
   timezone: string;
@@ -48,6 +48,8 @@ export interface Config {
   inputsSupported: string[];
   outputsSupported: string[];
   runLogFileLimit: number;
+  // DEPRECATED
+  outputDir?: string;
 }
 
 interface ConfigFile
@@ -62,7 +64,7 @@ const validLogLevels: ValidLogLevels[] = ["debug", "info", "warn", "success", "e
 const defaultConfig: Config = {
   configFile: "GMT",
   timezone: "GMT",
-  outputDir: path.join(homedir(), "api-data"),
+  jsonOutputDir: path.join(homedir(), "api-data"),
   dbOutputDir: path.join(homedir(), "db-data"),
   filesOutputDir: path.join(homedir(), "api-data", "_files"),
   originDate: "1900-01-01",
@@ -115,11 +117,22 @@ export default (): Config => {
     localConfig = (configImport as { default: object }).default as ConfigFile;
   }
 
+  // DEPRECATED
+  if (localConfig.outputDir) {
+    console.log(
+      "⚠️  The 'outputDir' config option is deprecated. Use 'jsonOutputDir' instead."
+    );
+    if (!localConfig.jsonOutputDir) {
+      localConfig.jsonOutputDir = localConfig.outputDir;
+    }
+    delete localConfig.outputDir;
+  }
+
   processedConfig = Object.assign({}, defaultConfig, localConfig);
   processedConfig.configFile = configImport ? configPath : null;
 
   if (DEBUG_OUTPUT === "true" || DEBUG_ALL === "true") {
-    processedConfig.outputDir =
+    processedConfig.jsonOutputDir =
       localConfig.debugOutputDir || defaultConfig.debugOutputDir;
     processedConfig.compressJson =
       localConfig.debugCompressJson || defaultConfig.debugCompressJson;
@@ -138,17 +151,20 @@ export default (): Config => {
   }
 
   // Normalize the JSON output dir
-  if (processedConfig.outputDir.at(0) === "~") {
-    processedConfig.outputDir = path.join(homedir(), processedConfig.outputDir.slice(1));
+  if (processedConfig.jsonOutputDir.at(0) === "~") {
+    processedConfig.jsonOutputDir = path.join(
+      homedir(),
+      processedConfig.jsonOutputDir.slice(1)
+    );
   }
 
-  if (!pathExists(processedConfig.outputDir)) {
-    makeDirectory(processedConfig.outputDir);
+  if (!pathExists(processedConfig.jsonOutputDir)) {
+    makeDirectory(processedConfig.jsonOutputDir);
   }
 
-  if (!pathAccessible(processedConfig.outputDir)) {
+  if (!pathAccessible(processedConfig.jsonOutputDir)) {
     throw new Error(
-      `Configured output dir "${processedConfig.outputDir}" cannot be accessed`
+      `Configured output dir "${processedConfig.jsonOutputDir}" cannot be accessed`
     );
   }
 
@@ -172,7 +188,7 @@ export default (): Config => {
 
   // If the output dir is defined locally, the files dir should follow
   processedConfig.filesOutputDir =
-    localConfig.filesOutputDir || path.join(processedConfig.outputDir, "_files");
+    localConfig.filesOutputDir || path.join(processedConfig.jsonOutputDir, "_files");
 
   if (!pathExists(processedConfig.filesOutputDir)) {
     makeDirectory(processedConfig.filesOutputDir);
@@ -195,7 +211,7 @@ export default (): Config => {
   processedConfig.importsSupported = importsSupported;
 
   // TODO: Need a better way to determine valid input data sources
-  processedConfig.inputsSupported = readdirSync(processedConfig.outputDir).filter(
+  processedConfig.inputsSupported = readdirSync(processedConfig.jsonOutputDir).filter(
     (dirName) => ![".", "_"].includes(dirName[0])
   );
 

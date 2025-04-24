@@ -87,7 +87,7 @@ type AnyLogEntry = RunLogInfoEntry | RunLogSuccessEntry | RunLogErrorEntry;
 /// Helpers
 //
 
-const { logLevel, saveEmptyLogs, runLogFileLimit, outputDir } = getConfig();
+const { logLevel, saveEmptyLogs, runLogFileLimit, jsonOutputDir } = getConfig();
 
 const runLog: RunLogFile = {
   dateTime: runDateUtc().dateTime,
@@ -112,7 +112,7 @@ const _truncateLogFiles = (logPath: string[]) => {
     return;
   }
 
-  (readdirSync(path.join(outputDir, ...logPath), { withFileTypes: true }) || [])
+  (readdirSync(path.join(jsonOutputDir, ...logPath), { withFileTypes: true }) || [])
     .filter(isFileJson)
     .map((file) => path.join(file.parentPath, file.name))
     .sort(arraySortDescending)

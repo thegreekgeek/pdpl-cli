@@ -107,7 +107,7 @@ export const validateRecipe = async (
     const inputObject = recipe.input[inputName];
     for (const subName in inputObject) {
       const inputFullName = `${inputName}.${subName}`;
-      const dataPath = path.join(config.outputDir, inputName, subName);
+      const dataPath = path.join(config.jsonOutputDir, inputName, subName);
       try {
         // TODO: No data should not always throw
         const inputData = readdirSync(dataPath);

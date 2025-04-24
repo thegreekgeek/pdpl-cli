@@ -41,7 +41,7 @@ export default class ApiLogs extends ApiBaseCommand<typeof ApiLogs> {
   public override async run(): Promise<void> {
     const { apiName } = this.args;
     const { "number": numberToDisplay, "errors-only": errOnly } = this.flags;
-    const apiLogsPath = path.join(getConfig().outputDir, apiName, "_runs");
+    const apiLogsPath = path.join(getConfig().jsonOutputDir, apiName, "_runs");
 
     const logFiles = readDirectory(apiLogsPath)
       .sort((a, b) => (a > b ? -1 : b > a ? 1 : 0))

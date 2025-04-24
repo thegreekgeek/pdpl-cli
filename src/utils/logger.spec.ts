@@ -10,7 +10,7 @@ import { writeFile } from "./fs.js";
 
 vi.mock("./config.js", async () => ({
   default: () => ({
-    outputDir: "/output/dir",
+    jsonOutputDir: "/output/dir",
     logLevel: "info",
   }),
 }));

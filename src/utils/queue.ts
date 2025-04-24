@@ -51,7 +51,7 @@ const writeQueue = () => {
 
 export const loadQueue = (apiHandler: ApiHandler) => {
   const apiName = apiHandler.getApiName();
-  const dirPath = path.join(getConfig().outputDir, apiName);
+  const dirPath = path.join(getConfig().jsonOutputDir, apiName);
   queueFile = path.join(dirPath, "_queue.json");
 
   if (!pathExists(queueFile)) {

@@ -122,7 +122,7 @@ export const getLatestFileContents = (writePath: string) => {
 export const makeOutputPath = (apiPath: string[], identifier?: string) => {
   const run = runDateUtc().fileName;
   const fileName = (identifier ? `${identifier}--run-${run}` : run) + ".json";
-  const outputPath = path.join(getConfig().outputDir, ...apiPath);
+  const outputPath = path.join(getConfig().jsonOutputDir, ...apiPath);
   makeDirectory(outputPath);
   return path.join(outputPath, fileName);
 };

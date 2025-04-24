@@ -18,7 +18,7 @@ vi.mock("./fs.js", () => ({
 import * as queue from "./queue.js";
 import { ApiHandler, EpSnapshot } from "./types.js";
 
-const outputDir = getConfig().outputDir;
+const outputDir = getConfig().jsonOutputDir;
 const queueFilePath = `${outputDir}/API_NAME/_queue.json`;
 
 const mockApiHandler: ApiHandler = {
