@@ -1,5 +1,5 @@
 import { Command } from "@oclif/core";
-import { copyFileSync, existsSync, readdirSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { load as loadYaml } from "js-yaml";
 import path from "path";
 
@@ -35,14 +35,16 @@ export default class Log extends Command {
       if (fileParts[0] !== "" || fileParts.length < 3) {
         continue;
       }
+      console.log(`Reading: ${file.name}`);
 
       const frontMatter = loadYaml(fileParts[1]) as { tags?: string[] };
       const { tags = [] } = frontMatter;
 
       if (tags && tags.includes("artifact/devlog") && tags.includes("topic/pdpl")) {
-        const newFileName = file.name.split(" - ")[0] + ".md";
+        console.log(`Writing: ${file.name}`);
+        const newFileName = file.name.split(" - ")[0].split("T")[0] + ".md";
         const newFilePath = path.join(devlogDest, newFileName);
-        copyFileSync(fullPath, newFilePath);
+        writeFileSync(newFilePath, fileParts[2]);
       }
     }
   }
