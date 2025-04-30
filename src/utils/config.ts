@@ -15,9 +15,11 @@ import {
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const { PATH_TO_ENV } = process.env;
+const { PATH_TO_ENV, PDPL_PATH_TO_ENV } = process.env;
 
-dotenvConfig({ path: PATH_TO_ENV || path.join(DEFAULT_CONFIG_DIR, ".env") });
+dotenvConfig({
+  path: PATH_TO_ENV || PDPL_PATH_TO_ENV || path.join(DEFAULT_CONFIG_DIR, ".env"),
+});
 
 const {
   DEBUG_OUTPUT = "false",

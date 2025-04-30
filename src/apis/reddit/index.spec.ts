@@ -1,13 +1,23 @@
 import { AxiosResponse } from "axios";
-import { EpChronological } from "../../utils/types.js";
-import ouraHandler from "./index.js";
+import { ApiHandler, EpChronological } from "../../utils/types.js";
 
 describe("Module: Reddit API handler", () => {
+  let redditHandler: ApiHandler;
+
+  beforeAll(async () => {
+    process.env["REDDIT_USER_NAME"] = "test-user";
+    redditHandler = (
+      (await import(`./index.js`)) as {
+        default: ApiHandler;
+      }
+    ).default;
+  });
+
   describe("Comments endpoint", () => {
     let epHandler: EpChronological;
 
     beforeEach(() => {
-      epHandler = ouraHandler.endpointsPrimary.filter((handler) => {
+      epHandler = redditHandler.endpointsPrimary.filter((handler) => {
         return (
           handler.getEndpoint() === `user/${process.env["REDDIT_USER_NAME"]}/comments`
         );
@@ -52,7 +62,7 @@ describe("Module: Reddit API handler", () => {
     let epHandler: EpChronological;
 
     beforeEach(() => {
-      epHandler = ouraHandler.endpointsPrimary.filter((handler) => {
+      epHandler = redditHandler.endpointsPrimary.filter((handler) => {
         return (
           handler.getEndpoint() === `user/${process.env["REDDIT_USER_NAME"]}/submitted`
         );
