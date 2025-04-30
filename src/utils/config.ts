@@ -5,7 +5,13 @@ import { config as dotenvConfig } from "dotenv";
 
 import { makeDirectory, pathAccessible, pathExists } from "./fs.js";
 import { ValidLogLevels } from "./logger.js";
-import { DEFAULT_CONFIG_DIR, DEFAULT_CONFIG_PATH } from "./constants.js";
+import {
+  DEFAULT_CONFIG_DIR,
+  DEFAULT_CONFIG_PATH,
+  DEFAULT_DB_DIR,
+  DEFAULT_FILES_DIR,
+  DEFAULT_JSON_DIR,
+} from "./constants.js";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -63,9 +69,9 @@ const validLogLevels: ValidLogLevels[] = ["debug", "info", "warn", "success", "e
 const defaultConfig: Config = {
   configFile: "GMT",
   timezone: "GMT",
-  jsonOutputDir: path.join(homedir(), "api-data"),
-  dbOutputDir: path.join(homedir(), "db-data"),
-  filesOutputDir: path.join(homedir(), "api-data", "_files"),
+  jsonOutputDir: DEFAULT_JSON_DIR,
+  dbOutputDir: DEFAULT_DB_DIR,
+  filesOutputDir: DEFAULT_FILES_DIR,
   originDate: "1900-01-01",
   apis: {},
   dbs: {},
@@ -78,7 +84,7 @@ const defaultConfig: Config = {
   logLevel: "info",
   debugSaveMocks: false,
   saveEmptyLogs: true,
-  debugOutputDir: path.join(homedir(), "api-data-DEBUG"),
+  debugOutputDir: path.join(DEFAULT_CONFIG_DIR, "json-DEBUG"),
   debugCompressJson: false,
   runLogFileLimit: 0,
 };
