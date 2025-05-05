@@ -11,6 +11,7 @@ import {
   DEFAULT_DB_DIR,
   DEFAULT_FILES_DIR,
   DEFAULT_JSON_DIR,
+  DEFAULT_TABLES_DIR,
 } from "./constants.js";
 import { fileURLToPath } from "url";
 
@@ -37,6 +38,7 @@ export interface Config {
   jsonOutputDir: string;
   dbOutputDir: string;
   filesOutputDir: string;
+  tablesInputDir: string;
   timezone: string;
   originDate: string;
   apis: Record<string, string[] | true>;
@@ -74,6 +76,7 @@ const defaultConfig: Config = {
   jsonOutputDir: DEFAULT_JSON_DIR,
   dbOutputDir: DEFAULT_DB_DIR,
   filesOutputDir: DEFAULT_FILES_DIR,
+  tablesInputDir: DEFAULT_TABLES_DIR,
   originDate: "1900-01-01",
   apis: {},
   dbs: {},
