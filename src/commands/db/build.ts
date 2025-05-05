@@ -57,23 +57,31 @@ export default class BuildDb extends DbBaseCommand<typeof DbBaseCommand> {
         }
       ).default;
       endpointHandlers.push(
-        ...endpointsPrimary.map((endpoint) => ({
-          api: processDb,
-          endpoint: endpoint.getDirName(),
-          saveLatest: !endpoint.isChronological(),
-          dupeIdentifier: endpoint.isChronological()
-            ? (endpoint as EpChronological).getIdentifierProp?.()
-            : undefined,
-        }))
+        ...endpointsPrimary
+          .filter((endpoint) => !endpointFlag || endpointFlag === endpoint.getDirName())
+          .map((endpoint) => ({
+            api: processDb,
+            endpoint: endpoint.getDirName(),
+            saveLatest: !endpoint.isChronological(),
+            dupeIdentifier: endpoint.isChronological()
+              ? (endpoint as EpChronological).getIdentifierProp?.()
+              : undefined,
+          }))
       );
       endpointHandlers.push(
-        ...endpointsSecondary.map((endpoint) => ({
-          api: processDb,
-          endpoint: endpoint.getDirName(),
-          saveLatest: false,
-          dupeIdentifier: endpoint.getIdentifierProp?.(),
-        }))
+        ...endpointsSecondary
+          .filter((endpoint) => !endpointFlag || endpointFlag === endpoint.getDirName())
+          .map((endpoint) => ({
+            api: processDb,
+            endpoint: endpoint.getDirName(),
+            saveLatest: false,
+            dupeIdentifier: endpoint.getIdentifierProp?.(),
+          }))
       );
+    }
+
+    if (!endpointHandlers.length) {
+      throw new Error(`No tables to build based on current configuration.`);
     }
 
     for (const handler of endpointHandlers) {
