@@ -113,6 +113,22 @@ if (!attemptedImport) {
   attemptedImport = true;
 }
 
+const normalizeDir = (dir: string) => {
+  if (dir.at(0) === "~") {
+    dir = path.join(homedir(), dir.slice(1));
+  }
+
+  if (!pathExists(dir)) {
+    makeDirectory(dir);
+  }
+
+  if (!pathAccessible(dir)) {
+    throw new Error(`Configured output dir "${dir}" cannot be accessed`);
+  }
+
+  return dir;
+};
+
 ////
 /// Export
 //
@@ -161,41 +177,9 @@ export default (): Config => {
     processedConfig.logLevel = "debug";
   }
 
-  // Normalize the JSON output dir
-  if (processedConfig.jsonOutputDir.at(0) === "~") {
-    processedConfig.jsonOutputDir = path.join(
-      homedir(),
-      processedConfig.jsonOutputDir.slice(1)
-    );
-  }
-
-  if (!pathExists(processedConfig.jsonOutputDir)) {
-    makeDirectory(processedConfig.jsonOutputDir);
-  }
-
-  if (!pathAccessible(processedConfig.jsonOutputDir)) {
-    throw new Error(
-      `Configured output dir "${processedConfig.jsonOutputDir}" cannot be accessed`
-    );
-  }
-
-  // Normalize the DB output dir
-  if (processedConfig.dbOutputDir.at(0) === "~") {
-    processedConfig.dbOutputDir = path.join(
-      homedir(),
-      processedConfig.dbOutputDir.slice(1)
-    );
-  }
-
-  if (!pathExists(processedConfig.dbOutputDir)) {
-    makeDirectory(processedConfig.dbOutputDir);
-  }
-
-  if (!pathAccessible(processedConfig.dbOutputDir)) {
-    throw new Error(
-      `Configured output dir "${processedConfig.dbOutputDir}" cannot be accessed`
-    );
-  }
+  processedConfig.jsonOutputDir = normalizeDir(processedConfig.jsonOutputDir);
+  processedConfig.dbOutputDir = normalizeDir(processedConfig.dbOutputDir);
+  processedConfig.tablesInputDir = normalizeDir(processedConfig.tablesInputDir);
 
   // If the output dir is defined locally, the files dir should follow
   processedConfig.filesOutputDir =
