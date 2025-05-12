@@ -267,7 +267,62 @@ Leave your computer on and wait for about an hour. Once the time has passed, che
 # ... you should see a few new runs depending on how long you waited
 ```
 
+## Load JSON into DB tables
+
+Now that we've got some JSON data, let's load that into a database table and see how it all looks. Edit your configuration file to add a `dbs` property set to an object with a `github` property set to `true:
+
+```js
+export default {
+  // ... other configuration
+  dbs: {
+    github: true
+  }
+}
+```
+
+Now run the `db:load` command to load all the JSON we gathered already:
+
+```bash
+$ LOG_LEVEL=debug pdpl db:load
+```
+
+With the "debug" log level, you should see an output like the one below:
+
+```
+Building table: github__user
+Reading JSON from: /Users/joshcanhelp/Documents/PDPL/github/user/2025-04-24T22-10-46-538Z.json
+Building table: github__user--starred
+Reading JSON from: /Users/joshcanhelp/Documents/PDPL/github/user--starred/2025-04-24T22-09-40-945Z.json
+Building table: github__user--followers
+Reading JSON from: /Users/joshcanhelp/Documents/PDPL/github/user--followers/2025-04-21T18-42-45-259Z.json
+Building table: github__user--gists
+Reading JSON from: /Users/joshcanhelp/Documents/PDPL/github/user--gists/*.json
+Building table: github__user--events
+Reading JSON from: /Users/joshcanhelp/Documents/PDPL/github/user--events/*.json
+```
+
+You can see one of the table descriptions with `db:describe`:
+
+```bash
+$ pdpl db:describe --api="github" --endpoint="user"
+
+======
+Describing table: github__user
+======
+  login => VARCHAR
+  id => BIGINT
+  node_id => VARCHAR
+  avatar_url => VARCHAR
+  gravatar_id => VARCHAR
+# ...
+```
+
+Under the hood, PDPL uses DuckDB to automatically determine the data type and load everything into tables. You can [install DuckDB](https://duckdb.org/docs/installation/) on your machine and use the [DuckDB Local UI](https://duckdb.org/2025/03/12/duckdb-ui.html) to play around with your data in queries.
+
+
 ## Generate Output Data
+
+Note: This section is based on an older data model and will change soon.
 
 Now that we have our input data coming in, let's write a simple set of instructions to transform the data we have now into a CSV file. 
 
