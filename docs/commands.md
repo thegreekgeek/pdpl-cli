@@ -26,7 +26,8 @@ USAGE
 * [`pdpl api:queue:set APINAME`](#pdpl-apiqueueset-apiname)
 * [`pdpl config:get`](#pdpl-configget)
 * [`pdpl config:init`](#pdpl-configinit)
-* [`pdpl db:build`](#pdpl-dbbuild)
+* [`pdpl db:describe`](#pdpl-dbdescribe)
+* [`pdpl db:load`](#pdpl-dbload)
 * [`pdpl import IMPORTNAME IMPORTPATH`](#pdpl-import-importname-importpath)
 * [`pdpl recipe:run RECIPE_NAME`](#pdpl-reciperun-recipe_name)
 * [`pdpl recipe:validate RECIPE_NAME`](#pdpl-recipevalidate-recipe_name)
@@ -196,24 +197,44 @@ EXAMPLES
   $ pdpl config:init
 ```
 
-## `pdpl db:build`
+## `pdpl db:describe`
+
+Describe tables built from raw JSON data
+
+```
+USAGE
+  $ pdpl db:describe [-a <value>] [-e <value>]
+
+FLAGS
+  -a, --api=<value>       Only describe tables built for a specific API
+  -e, --endpoint=<value>  Only describe tables built for a specific endpoint
+
+EXAMPLES
+  $ pdpl db:describe
+
+  $ pdpl db:describe --api API_NAME
+
+  $ pdpl db:describe --api API_NAME --endpoint ENDPOINT_NAME
+```
+
+## `pdpl db:load`
 
 Build tables from JSON files for enabled or indicated sources
 
 ```
 USAGE
-  $ pdpl db:build [-a <value>] [-e <value>]
+  $ pdpl db:load [-a <value>] [-e <value>]
 
 FLAGS
   -a, --api=<value>       Only build tables for a specific API
   -e, --endpoint=<value>  Only build tables for a specific endpoint
 
 EXAMPLES
-  $ pdpl db:build API_NAME
+  $ pdpl db:load API_NAME
 
-  $ pdpl db:build API_NAME --api API_NAME
+  $ pdpl db:load API_NAME --api API_NAME
 
-  $ pdpl db:build API_NAME --api API_NAME --endpoint ENDPOINT_NAME
+  $ pdpl db:load API_NAME --api API_NAME --endpoint ENDPOINT_NAME
 ```
 
 ## `pdpl import IMPORTNAME IMPORTPATH`
