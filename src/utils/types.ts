@@ -100,4 +100,3 @@ export interface OutputStrategy {
   isReady: (fields: KeyVal, data?: KeyVal) => string[];
   handle: OutputStrategyHandler;
 }
-export interface DbTransformation {}

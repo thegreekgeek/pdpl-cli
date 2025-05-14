@@ -14,7 +14,7 @@ import {
   DEFAULT_TABLES_DIR,
 } from "./constants.js";
 import { fileURLToPath } from "url";
-import { DbTransformation } from "./types.js";
+import { DbTransformation } from "../commands/db/transform.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { PATH_TO_ENV, PDPL_PATH_TO_ENV } = process.env;
@@ -63,7 +63,7 @@ export interface Config {
   outputDir?: string;
 }
 
-interface ConfigFile
+export interface ConfigFile
   extends Partial<Omit<Config, "configFile" | "apisSupported" | "importsSupported">> {}
 
 ////
@@ -104,7 +104,7 @@ let attemptedImport = false;
 if (!attemptedImport) {
   if (existsSync(configPath)) {
     try {
-      configImport = (await import(configPath)) as object;
+      configImport = (await import(configPath)) as ConfigFile;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "<unknown error>";
       console.log(
