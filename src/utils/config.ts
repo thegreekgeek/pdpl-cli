@@ -14,6 +14,7 @@ import {
   DEFAULT_TABLES_DIR,
 } from "./constants.js";
 import { fileURLToPath } from "url";
+import { DbTransformation } from "./types.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { PATH_TO_ENV, PDPL_PATH_TO_ENV } = process.env;
@@ -50,6 +51,7 @@ export interface Config {
   debugSaveMocks: boolean;
   debugOutputDir: string;
   debugCompressJson: boolean;
+  transformations: DbTransformation[];
   // System set
   configFile: string | null;
   apisSupported: string[];
@@ -92,6 +94,7 @@ const defaultConfig: Config = {
   debugOutputDir: path.join(DEFAULT_CONFIG_DIR, "json-DEBUG"),
   debugCompressJson: false,
   runLogFileLimit: 0,
+  transformations: [],
 };
 
 const configPath = PATH_TO_CONFIG ? PATH_TO_CONFIG : DEFAULT_CONFIG_PATH;
