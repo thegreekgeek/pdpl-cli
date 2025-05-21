@@ -5,13 +5,6 @@ import getConfig from "../../utils/config.js";
 import path from "path";
 import { removeFile, writeFile } from "../../utils/fs.js";
 
-export interface DbTransformation {
-  getSourceTable: () => string;
-  getSourceColumns: () => string[];
-  transform: (data: object) => object;
-  getDestinationTable: () => string;
-}
-
 export interface DuckDBConnection extends Connection {}
 
 export default class TransformDb extends DbBaseCommand<typeof DbBaseCommand> {

@@ -14,7 +14,7 @@ import {
   DEFAULT_TABLES_DIR,
 } from "./constants.js";
 import { fileURLToPath } from "url";
-import { DbTransformation } from "../commands/db/transform.js";
+import { DbTransformation } from "./types.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { PATH_TO_ENV, PDPL_PATH_TO_ENV } = process.env;
