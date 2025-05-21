@@ -6,7 +6,7 @@ $ npm install -g pdpl-cli
 $ pdpl COMMAND
 running command...
 $ pdpl (--version)
-pdpl-cli/0.13.0 darwin-arm64 node-v22.14.0
+pdpl-cli/0.14.0 darwin-arm64 node-v22.14.0
 $ pdpl --help [COMMAND]
 USAGE
   $ pdpl COMMAND
@@ -28,6 +28,7 @@ USAGE
 * [`pdpl config:init`](#pdpl-configinit)
 * [`pdpl db:describe`](#pdpl-dbdescribe)
 * [`pdpl db:load`](#pdpl-dbload)
+* [`pdpl db:transform`](#pdpl-dbtransform)
 * [`pdpl import IMPORTNAME IMPORTPATH`](#pdpl-import-importname-importpath)
 * [`pdpl recipe:run RECIPE_NAME`](#pdpl-reciperun-recipe_name)
 * [`pdpl recipe:validate RECIPE_NAME`](#pdpl-recipevalidate-recipe_name)
@@ -235,6 +236,18 @@ EXAMPLES
   $ pdpl db:load API_NAME --api API_NAME
 
   $ pdpl db:load API_NAME --api API_NAME --endpoint ENDPOINT_NAME
+```
+
+## `pdpl db:transform`
+
+Build new tables from existing or transformed data
+
+```
+USAGE
+  $ pdpl db:transform
+
+EXAMPLES
+  $ pdpl db:transform
 ```
 
 ## `pdpl import IMPORTNAME IMPORTPATH`
