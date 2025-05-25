@@ -14,7 +14,7 @@ import {
   DEFAULT_TABLES_DIR,
 } from "./constants.js";
 import { fileURLToPath } from "url";
-import { DbTransformation } from "./types.js";
+import { ConfigFile, DbTransformation } from "./types.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { PATH_TO_ENV, PDPL_PATH_TO_ENV } = process.env;
@@ -62,9 +62,6 @@ export interface Config {
   // DEPRECATED
   outputDir?: string;
 }
-
-export interface ConfigFile
-  extends Partial<Omit<Config, "configFile" | "apisSupported" | "importsSupported">> {}
 
 ////
 /// Helpers

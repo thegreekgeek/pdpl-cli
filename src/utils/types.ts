@@ -1,8 +1,12 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { AuthorizeServerConfig } from "../commands/api/authorize.js";
 import { Database } from "duckdb-async";
+import { Config } from "./config.js";
 
 export type KeyVal = { [key: string]: string };
+
+export interface ConfigFile
+  extends Partial<Omit<Config, "configFile" | "apisSupported" | "importsSupported">> {}
 
 export interface DailyData {
   [key: string]: object[];
