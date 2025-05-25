@@ -6,10 +6,8 @@ import { padLeftZero } from "./string.js";
 //
 
 export interface PipelineTransforms {
-  trim: (string: string) => string;
   toStandardDate: (string: string) => string;
   toStandardTime: (string: string) => string;
-  toUpperCase: (string: string) => string;
   camelCaseToSpaces: (string: string) => string;
   secondsToTimeString: (seconds: number) => string;
   metersToMiles: (meters: number) => number;
@@ -20,10 +18,6 @@ export interface PipelineTransforms {
 ////
 /// Exports
 //
-
-const trim = (string: string) => (string ? string.trim() : "");
-
-const toUpperCase = (string: string) => string.toUpperCase();
 
 const toStandardDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -79,10 +73,8 @@ const metersPerSecondToMph = (mps: number) => {
 };
 
 const defaultExport: PipelineTransforms = {
-  trim,
   toStandardDate,
   toStandardTime,
-  toUpperCase,
   camelCaseToSpaces,
   secondsToTimeString,
   metersToMiles,
