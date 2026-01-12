@@ -3,3 +3,4 @@ src/scripts/test.ts
 node_modules
 dist
 .git
+.markdown-sync.user.cjs
