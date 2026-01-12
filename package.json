@@ -32,7 +32,9 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=20"
   },
@@ -51,6 +53,7 @@
     "vcf": "^2.1.2"
   },
   "devDependencies": {
+    "@joshcanhelp/mdsync": "^0.5.0",
     "@types/js-yaml": "^4.0.9",
     "@types/mustache": "^4.2.5",
     "@types/node": "^22.15.21",
