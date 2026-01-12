@@ -1,3 +1,4 @@
+
 # Logging (part 2)
 
 ## Status
@@ -5,7 +6,7 @@
 `ACCEPTED`
 ## Context
 
-[ADR 006: Logging](./006-logging.md)
+See ADR006
 
 Re-opening this topic because the current logging system is not working well for debugging. The run files that we're currently using are great for aggregate reporting but not great for in-the-moment debugging. We're also missing the call stack and line numbers, making troubleshooting much harder than it should be. 
 
@@ -22,7 +23,7 @@ Learned that seeing the call stack is shown if you run the command with `./bin/d
 
 ## Consequences
 
-See [ADR 006: Logging](./006-logging.md)
+See [ADR 006: Logging](Logs/decisions/2024-03-11%20-%20ADR006%20-%20Logging.md)
 
 ## Decision
 
