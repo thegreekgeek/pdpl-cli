@@ -75,16 +75,15 @@ const parseAccessUrl = (accessUrl: string) => {
   };
 };
 
-const NINETY_DAYS_IN_SEC = ONE_DAY_IN_SEC * 90;
-
 const getTransactionHistoricParams = (
   currentParams?: object
 ): SimplefinTransactionParams => {
   const params = currentParams as SimplefinTransactionParams | undefined;
+  const ninetyDaysInSec = ONE_DAY_IN_SEC * 90;
   if (params && typeof params["start-date"] === "number") {
     const prevStart = params["start-date"];
     return {
-      "start-date": prevStart - NINETY_DAYS_IN_SEC,
+      "start-date": prevStart - ninetyDaysInSec,
       "end-date": prevStart,
       version: 2,
       pending: 1,
@@ -92,7 +91,7 @@ const getTransactionHistoricParams = (
   }
   const now = getEpochNow();
   return {
-    "start-date": now - NINETY_DAYS_IN_SEC,
+    "start-date": now - ninetyDaysInSec,
     "end-date": now,
     version: 2,
     pending: 1,

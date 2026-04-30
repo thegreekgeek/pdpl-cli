@@ -33,7 +33,10 @@ Visit https://bridge.simplefin.org/simplefin/create (or your institution's Simpl
     try {
       claimUrl = Buffer.from(token, "base64").toString("utf8").trim();
     } catch {
-      this.error("Could not Base64-decode the provided SimpleFIN Token. Please check and try again.");
+      this.error(
+        "Could not Base64-decode the provided SimpleFIN Token. " +
+          "The token must be a valid Base64-encoded URL string. Please check and try again."
+      );
     }
 
     if (!claimUrl.startsWith("https://")) {
@@ -69,6 +72,9 @@ Visit https://bridge.simplefin.org/simplefin/create (or your institution's Simpl
     }
 
     const existing = process.env["SIMPLEFIN_ACCESS_URL"] || "";
+    if (existing) {
+      this.log("⚠️  An existing SIMPLEFIN_ACCESS_URL will be replaced.");
+    }
     envWrite("SIMPLEFIN_ACCESS_URL", accessUrl, existing);
 
     this.log("✅ SIMPLEFIN_ACCESS_URL saved to .env. Add 'simplefin' to your config to start fetching data.");
