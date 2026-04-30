@@ -50,3 +50,37 @@ The configuration options that can be set via environment variables are the foll
 - `PATH_TO_CONFIG`: Direct path to a configuration file to use (see above for options and format).
 - `PATH_TO_ENV`: Direct path to a file to use for environment variables.
 - `EXPORT_DB_PATH`: Populate this with a direct path to a directory to export the resulting DB to CSV.
+- `ORG_DAILY_NOTES_PATH`: Absolute path to the directory where org-mode daily note files (`.org`) will be written by the `org` output plugin. The directory must already exist and be readable/writable. When set, the `org` output handler becomes available in recipes. See the [org output plugin](#org-output-plugin) section below for details.
+
+## Org output plugin
+
+The `org` output plugin writes data to org-mode daily note files — one `.org` file per day. It mirrors the `obsidian` plugin's `daily_notes_append` strategy.
+
+### Setup
+
+Set `ORG_DAILY_NOTES_PATH` in your `.env` file to the directory that should contain the daily note files:
+
+```
+ORG_DAILY_NOTES_PATH="/path/to/org/daily-notes"
+```
+
+### Recipe usage
+
+```yaml
+output:
+  org:
+    - strategy: 'daily_notes_append'
+      data:
+        date: 'date'                   # input field containing the YYYY-MM-DD date
+        template: "{{event_summary}}"  # Mustache template for each entry line
+        section: "Calendar Events"     # org heading name (default: "pdpl")
+        add_title: true                # write #+TITLE: for new files (default: true)
+        year_folders: false            # store files under <path>/<YYYY>/ (default: false)
+```
+
+### Behaviour
+
+- Each run appends or replaces the managed section (identified by the `:pdpl:` tag on the heading) in the daily `.org` file, leaving all other content untouched.
+- If the file does not yet exist and `add_title` is `true`, a `#+TITLE: YYYY-MM-DD` line is prepended.
+- When `year_folders` is `true`, files are stored as `<ORG_DAILY_NOTES_PATH>/<YYYY>/<YYYY-MM-DD>.org`; otherwise they are placed directly inside `ORG_DAILY_NOTES_PATH`.
+- Duplicate rendered lines for the same date are deduplicated before writing.

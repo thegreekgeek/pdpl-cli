@@ -1,0 +1,38 @@
+version: 0.1
+input:
+  google:
+    calendar--events:
+      summary: 'event_summary'
+      location: 'location'
+      start.dateTime: 'start_date_time'
+      start.date: 'start_date'
+      'attendees[].email': 'event_emails'
+  apple-import:
+    contacts:
+      'fn[].value': 'name'
+      'email[].value': 'contact_emails'
+output:
+  org:
+    - strategy: 'daily_notes_append'
+      data:
+        date: 'date'
+        template: "{{event_summary}}{{#start_time}} at {{start_time}}{{/start_time}}{{#location}} ({{location}}){{/location}}"
+        section: "Calendar Events"
+        add_title: true
+        year_folders: false
+pipeline:
+  - field: 'start_date'
+    toField: 'date'
+  - field: 'start_date_time'
+    transform:
+      - 'toStandardDate'
+    toFieldUpdateIfEmpty: 'date'
+  - field: 'start_date_time'
+    transform:
+      - 'toStandardTime'
+    toField: 'start_time'
+  - field: 'event_summary'
+    transform:
+      - 'trim'
+  - field: 'event_emails'
+    linkTo: 'contact_emails'
