@@ -166,7 +166,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
   },
   {
     isChronological: () => true,
-    getEndpoint: () => "accounts",
+    getEndpoint: () => "accounts--transactions",
     getDirName: () => "accounts--transactions",
     getParams: (): SimplefinTransactionParams => ({
       "start-date": getEpochNow() - ONE_WEEK_IN_SEC,
@@ -181,6 +181,24 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
     parseDayFromEntity: parseDayFromTransaction,
     transformResponseData: transformTransactionsResponse,
     getIdentifierProp: () => "id",
+    shouldHistoricContinue: ({
+      responseDataRaw,
+      params,
+    }: {
+      responseDataRaw?: SimplefinAccountSet;
+      params?: Partial<SimplefinTransactionParams>;
+    }) => {
+      const transactionCount =
+        responseDataRaw?.accounts?.reduce(
+          (count, account) => count + (account.transactions?.length ?? 0),
+          0,
+        ) ?? 0;
+
+      if (transactionCount > 0) return true;
+
+      const startDate = params?.["start-date"];
+      return typeof startDate === "number" && startDate > ONE_WEEK_IN_SEC;
+    },
     handleApiError: handleAccountsApiError,
   },
 ];

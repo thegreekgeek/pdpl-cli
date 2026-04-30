@@ -1,18 +1,23 @@
 import { AxiosResponse } from "axios";
 import { EpChronological, EpSnapshot, ApiHandler } from "../../utils/types.js";
-import { parseDayFromTransaction } from "./index.js";
 
 describe("Module: SimpleFIN API handler", () => {
   let simplefinHandler: ApiHandler;
+  let parseDayFromTransaction: (
+    transaction: { posted: number; transacted_at?: number }
+  ) => string;
 
   beforeAll(async () => {
     process.env["SIMPLEFIN_ACCESS_URL"] =
       "https://user123:pass456@bridge.simplefin.org/simplefin";
-    simplefinHandler = (
-      (await import("./index.js")) as {
-        default: ApiHandler;
-      }
-    ).default;
+    const simplefinModule = (await import("./index.js")) as {
+      default: ApiHandler;
+      parseDayFromTransaction: (
+        transaction: { posted: number; transacted_at?: number }
+      ) => string;
+    };
+    simplefinHandler = simplefinModule.default;
+    parseDayFromTransaction = simplefinModule.parseDayFromTransaction;
   });
 
   describe("Accounts endpoint", () => {

@@ -46,8 +46,14 @@ Visit https://bridge.simplefin.org/simplefin/create (or your institution's Simpl
       );
     }
 
-    this.log(`Claiming Access URL from: ${claimUrl}`);
+    let claimUrlDisplay = "the provided SimpleFIN server";
+    try {
+      claimUrlDisplay = new URL(claimUrl).origin;
+    } catch {
+      // Fall back to a generic label rather than logging the full claim URL.
+    }
 
+    this.log(`Claiming Access URL from: ${claimUrlDisplay}`);
     let accessUrl: string;
     try {
       const response = await axios.post<string>(claimUrl);
