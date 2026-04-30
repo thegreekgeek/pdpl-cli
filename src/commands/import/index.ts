@@ -2,6 +2,7 @@ import { Args } from "@oclif/core";
 import path from "path";
 import { parse } from "csv-parse/sync";
 import vCard from "vcf";
+import yaml from "js-yaml";
 
 import { ImportBaseCommand, importNameArg } from "./_base.js";
 import { DailyData, ImportHandler } from "../../utils/types.js";
@@ -84,6 +85,11 @@ export default class Import extends ImportBaseCommand<typeof Import> {
             entities.push(contactObject);
           }
           break;
+        case "yaml": {
+          const parsed = yaml.load(fileContents);
+          entities = Array.isArray(parsed) ? (parsed as object[]) : [parsed as object];
+          break;
+        }
         default:
           throw new Error("Invalid parsing strategy");
       }

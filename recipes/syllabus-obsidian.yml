@@ -1,0 +1,24 @@
+version: 0.1
+input:
+  syllabus-import:
+    syllabus-assignments:
+      assignmentName: 'assignment_name'
+      assignmentType: 'assignment_type'
+      courseName: 'course_name'
+      courseCode: 'course_code'
+      weekName: 'week_name'
+      endTime: 'end_time'
+      day: 'date'
+output:
+  obsidian:
+    - strategy: 'daily_notes_append'
+      data:
+        date: 'date'
+        template: "- 📚 {{assignment_name}} ({{course_code}} — {{week_name}}) due {{end_time}}"
+pipeline:
+  - field: 'assignment_type'
+    transform:
+      - 'trim'
+  - field: 'assignment_name'
+    transform:
+      - 'trim'

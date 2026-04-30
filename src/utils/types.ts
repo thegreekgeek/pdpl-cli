@@ -79,7 +79,7 @@ export interface ImportHandler {
 
 export interface ImportFileHandler {
   getDirName: () => string;
-  parsingStrategy: () => "csv" | "json" | "vcf";
+  parsingStrategy: () => "csv" | "json" | "vcf" | "yaml";
   getImportPath?: () => string;
   parseDayFromEntity?: (entity: object | []) => string;
   transformEntity?: (entity: object | []) => object | null;
