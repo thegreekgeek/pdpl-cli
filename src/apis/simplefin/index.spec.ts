@@ -3,7 +3,7 @@ import { EpChronological, EpSnapshot, ApiHandler } from "../../utils/types.js";
 
 describe("Module: SimpleFIN API handler", () => {
   let simplefinHandler: ApiHandler;
-  let parseDayFromTransaction: (
+  let parseDayFromTransactionDef: (
     transaction: { posted: number; transacted_at?: number }
   ) => string;
 
@@ -17,7 +17,7 @@ describe("Module: SimpleFIN API handler", () => {
       ) => string;
     };
     simplefinHandler = simplefinModule.default;
-    parseDayFromTransaction = simplefinModule.parseDayFromTransaction;
+    parseDayFromTransactionDef = simplefinModule.parseDayFromTransaction;
   });
 
   describe("Accounts endpoint", () => {
@@ -74,6 +74,28 @@ describe("Module: SimpleFIN API handler", () => {
         data: { errlist: [], connections: [], accounts: [] },
       } as AxiosResponse;
       expect(epHandler.transformResponseData!(mockResponse)).toEqual([]);
+    });
+
+    it("logs errors from errlist if present", () => {
+      const consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const mockResponse = {
+        data: {
+          errlist: [
+            { code: "con.auth", msg: "Authentication required" },
+            { code: "gen.err", msg: "<strong>Bad error</strong>" }
+          ],
+          connections: [],
+          accounts: [],
+        },
+      } as unknown as AxiosResponse;
+      epHandler.transformResponseData!(mockResponse);
+      expect(consoleWarnMock).toHaveBeenCalledWith(
+        expect.stringContaining("⚠️ SimpleFIN returned error: [con.auth] Authentication required")
+      );
+      expect(consoleWarnMock).toHaveBeenCalledWith(
+        expect.stringContaining("⚠️ SimpleFIN returned error: [gen.err] &lt;strong&gt;Bad error&lt;/strong&gt;")
+      );
+      consoleWarnMock.mockRestore();
     });
   });
 
@@ -236,22 +258,72 @@ describe("Module: SimpleFIN API handler", () => {
       expect(result[1]).toMatchObject({ id: "TX-1" });
     });
   });
-});
 
-describe("parseDayFromTransaction", () => {
-  it("returns the correct date from a posted timestamp", () => {
-    // 978366153 = 2001-01-01 18:02:33 UTC
-    expect(parseDayFromTransaction({ posted: 978366153 })).toEqual("2001-01-01");
+  describe("parseDayFromTransaction", () => {
+    it("returns the correct date from a posted timestamp", () => {
+      // 978366153 = 2001-01-01 18:02:33 UTC
+      expect(parseDayFromTransactionDef({ posted: 978366153 })).toEqual("2001-01-01");
+    });
+
+    it("falls back to transacted_at when posted is 0 (pending)", () => {
+      // 793090572 = 1995-02-18 ~06:55 UTC
+      expect(
+        parseDayFromTransactionDef({ posted: 0, transacted_at: 793090572 })
+      ).toEqual("1995-02-18");
+    });
+
+    it("returns epoch date when both timestamps are 0", () => {
+      expect(parseDayFromTransactionDef({ posted: 0 })).toEqual("1970-01-01");
+    });
   });
 
-  it("falls back to transacted_at when posted is 0 (pending)", () => {
-    // 793090572 = 1995-02-18 ~06:55 UTC
-    expect(
-      parseDayFromTransaction({ posted: 0, transacted_at: 793090572 })
-    ).toEqual("1995-02-18");
-  });
+  describe("Error and Edge Case handling", () => {
+    it("handles 403 API errors", () => {
+      const consoleLogMock = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const epHandler = simplefinHandler.endpointsPrimary[0];
+      const mockError = { response: { status: 403 } };
+      epHandler.handleApiError!(mockError as any);
+      expect(consoleLogMock).toHaveBeenCalledWith(
+        expect.stringContaining("❌ SimpleFIN returned 403: access has been revoked")
+      );
+      consoleLogMock.mockRestore();
+    });
 
-  it("returns epoch date when both timestamps are 0", () => {
-    expect(parseDayFromTransaction({ posted: 0 })).toEqual("1970-01-01");
+    it("handles 402 API errors", () => {
+      const consoleLogMock = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const epHandler = simplefinHandler.endpointsPrimary[0];
+      const mockError = { response: { status: 402 } };
+      epHandler.handleApiError!(mockError as any);
+      expect(consoleLogMock).toHaveBeenCalledWith(
+        expect.stringContaining("❌ SimpleFIN returned 402: Payment required.")
+      );
+      consoleLogMock.mockRestore();
+    });
+
+    it("fails cleanly if HTTP is used instead of HTTPS", async () => {
+      // getApiBaseUrl uses SIMPLEFIN_ACCESS_URL from module scope, which is set at load.
+      // So, to test it, we have to stub out or call parseAccessUrl directly if we can't alter process.env post-import
+      // Since it's imported, we can mock process.env on a re-import or test a different way.
+      // Because SIMPLEFIN_ACCESS_URL was captured at load in index.ts, changing process.env here won't affect it.
+      // Let's test the `getApiAuthHeaders` or `getApiBaseUrl` by resetting the module cache and loading it.
+      vi.resetModules();
+      process.env["SIMPLEFIN_ACCESS_URL"] = "http://user123:pass456@bridge.simplefin.org/simplefin";
+      const simplefinModuleWithHttp = (await import("./index.js")).default;
+
+      const consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(() => {
+        simplefinModuleWithHttp.getApiBaseUrl();
+      }).toThrowError("SimpleFIN Access URL must use HTTPS.");
+
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        expect.stringContaining("❌ SimpleFIN error: Access URL must use HTTPS.")
+      );
+
+      consoleErrorMock.mockRestore();
+      // Reset after test
+      process.env["SIMPLEFIN_ACCESS_URL"] = "https://user123:pass456@bridge.simplefin.org/simplefin";
+      vi.resetModules();
+    });
   });
 });
