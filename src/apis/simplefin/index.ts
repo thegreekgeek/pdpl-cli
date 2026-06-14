@@ -66,8 +66,14 @@ interface SimplefinBalanceParams {
 /// Helpers
 //
 
+import { escapeHtml } from "../../utils/string.js";
+
 const parseAccessUrl = (accessUrl: string) => {
   const url = new URL(accessUrl);
+  if (url.protocol !== "https:") {
+    console.error("❌ SimpleFIN error: Access URL must use HTTPS.");
+    throw new Error("SimpleFIN Access URL must use HTTPS.");
+  }
   return {
     baseUrl: `${url.protocol}//${url.host}${url.pathname}/`,
     username: decodeURIComponent(url.username),
@@ -98,8 +104,18 @@ const getTransactionHistoricParams = (
   };
 };
 
+const logErrors = (errlist: object[]) => {
+  if (Array.isArray(errlist) && errlist.length > 0) {
+    errlist.forEach((err: any) => {
+      const sanitizedMsg = escapeHtml(err.msg || "Unknown error");
+      console.warn(`⚠️ SimpleFIN returned error: [${err.code}] ${sanitizedMsg}`);
+    });
+  }
+};
+
 const transformAccountsResponse = (response: AxiosResponse): SimplefinAccount[] => {
   const data = response.data as SimplefinAccountSet;
+  if (data.errlist) logErrors(data.errlist);
   return data.accounts || [];
 };
 
@@ -111,6 +127,8 @@ const transformTransactionsResponse = (
     ? (existingData as SimplefinTransaction[])
     : [];
   const data = response.data as SimplefinAccountSet;
+  if (data.errlist) logErrors(data.errlist);
+
   const transactions: SimplefinTransaction[] = [];
   for (const account of data.accounts || []) {
     for (const tx of account.transactions || []) {
@@ -123,7 +141,12 @@ const transformTransactionsResponse = (
 export const parseDayFromTransaction = (entity: object): string => {
   const tx = entity as SimplefinTransaction;
   const timestamp = tx.posted || tx.transacted_at || 0;
-  return getFormattedDate(0, new Date(timestamp * 1000));
+  const date = new Date(timestamp * 1000);
+  const yyyy = date.getUTCFullYear();
+  const mm = date.getUTCMonth() + 1;
+  const dd = date.getUTCDate();
+  const padLeftZero = (num: number) => num.toString().padStart(2, "0");
+  return `${yyyy}-${padLeftZero(mm)}-${padLeftZero(dd)}`;
 };
 
 const handleAccountsApiError = (apiError: AxiosError) => {
@@ -132,6 +155,8 @@ const handleAccountsApiError = (apiError: AxiosError) => {
       "❌ SimpleFIN returned 403: access has been revoked or credentials are invalid. " +
         "Re-run the setup command to obtain a new Access URL."
     );
+  } else if (apiError.response?.status === 402) {
+    console.log("❌ SimpleFIN returned 402: Payment required.");
   }
 };
 
@@ -166,7 +191,7 @@ const endpointsPrimary: (EpChronological | EpSnapshot)[] = [
   },
   {
     isChronological: () => true,
-    getEndpoint: () => "accounts--transactions",
+    getEndpoint: () => "accounts",
     getDirName: () => "accounts--transactions",
     getParams: (): SimplefinTransactionParams => ({
       "start-date": getEpochNow() - ONE_WEEK_IN_SEC,
